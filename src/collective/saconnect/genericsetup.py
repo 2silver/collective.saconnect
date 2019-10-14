@@ -16,7 +16,7 @@ class SQLAlchemyConnectionStringsXMLAdapter(XMLAdapterBase):
 
     def _exportNode(self):
         node = self._doc.createElement('connections')
-        names = self.context.keys()
+        names = list(self.context.keys())
         names.sort()
 
         for name in names:

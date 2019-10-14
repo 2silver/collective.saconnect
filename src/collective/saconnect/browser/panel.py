@@ -15,15 +15,15 @@ class IConnectionLine(Interface):
     """One row in the form
     """
     connname = schema.ASCIILine(
-        title=_(u'label_connection_name', default=u'Connection name'),
-        description=_(u'description_connection_name', default=u''),
+        title=_('label_connection_name', default='Connection name'),
+        description=_('description_connection_name', default=''),
         required=True,
     )
     connstring = schema.ASCIILine(
-        title=_(u"label_connection_string",
-                default=u"SQLAlchemy connection string"),
-        description=_(u"description_connection_string",
-                      default=u"driver://user:password@hostname/database"),
+        title=_("label_connection_string",
+                default="SQLAlchemy connection string"),
+        description=_("description_connection_string",
+                      default="driver://user:password@hostname/database"),
         required=True,
         default="sqlite:///"
     )
@@ -67,7 +67,7 @@ class ConnectionLine(object):
 
 
 class SQLAlchemyConnectionsForm(crud.CrudForm):
-    label = _(u'label_saconnectform', u'Manage SQLAlchemy connection strings')
+    label = _('label_saconnectform', 'Manage SQLAlchemy connection strings')
     update_schema = IConnectionLine
 
     def __init__(self, context, request):
@@ -77,7 +77,7 @@ class SQLAlchemyConnectionsForm(crud.CrudForm):
         )
 
     def get_items(self):
-        names = self.storage.keys()
+        names = list(self.storage.keys())
         names.sort()
         return [(name, ConnectionLine(name, self.storage[name], self))
                 for name in names]
@@ -85,15 +85,16 @@ class SQLAlchemyConnectionsForm(crud.CrudForm):
     def add(self, data):
         name = data['connname'].strip()
         if str(name) in self.storage:
-            msg = _(u'error_name_already_registered',
-                    u'The connection name is already registered')
+            msg = _('error_name_already_registered',
+                    'The connection name is already registered')
             msg = translate(msg, self.request)
             raise schema.ValidationError(msg)
 
         self.storage[name] = data['connstring'].strip()
         return ConnectionLine(name, data['connstring'].strip(), self)
 
-    def remove(self, (id, item)):
+    def remove(self, id_item):
+        (id, item) = id_item
         del self.storage[item.connname]
 
 SQLAlchemyConnectionsView = wrap_form(SQLAlchemyConnectionsForm)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from interfaces import ISQLAlchemyConnectionStrings
+from .interfaces import ISQLAlchemyConnectionStrings
 from persistent.mapping import PersistentMapping
 from UserDict import DictMixin
 from zope.annotation.interfaces import IAnnotatable
@@ -36,4 +36,4 @@ class SQLAlchemyConnectionStrings(DictMixin):
         modified(self, key)
 
     def keys(self):
-        return self._dict.keys()
+        return list(self._dict.keys())

@@ -62,7 +62,7 @@ def syncUtility(connections, event):
     sm = getSiteManager()
     for key in event.descriptions:
         factory = sm.queryUtility(ISiteScopedSessionEngineFactory, name=key)
-        if key in connections.keys():
+        if key in list(connections.keys()):
             if factory is not None:
                 factory.reset()  # modify
                 continue
